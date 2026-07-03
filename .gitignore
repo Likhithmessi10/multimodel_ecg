@@ -1,30 +1,56 @@
-# Byte-compiled / optimized / DLL files
+# Python compiled byte-code
 __pycache__/
-*.pyc
-*.pyo
+*.py[cod]
+*$py.class
 *.pyd
 
-# Virtual environments
+# Virtual environments and dependencies
 venv/
 .venv/
 env/
 venv.bak/
+.env
+.env.local
+.env.*
 
-# Local configuration files
+# IDE and editor configurations
+.vscode/
+.idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.swp
+
+# Streamlit configurations
 .streamlit/config.toml
+.streamlit/*.toml
 
-# Heavy datasets and cached waveforms/scalers
+# Heavy datasets, records, and cached arrays
 data/records100/
+data/records500/
 data/ptbxl_database.csv
 data/scp_statements.csv
 data/cache/
+*.npy
+*.csv
+*.dat
+*.hea
 
-# Saved model checkpoints and weights
+# Saved checkpoints, models, and serialized estimators
 models/*.pth
 models/*.joblib
+models/*.onnx
+models/*.pkl
 
-# OS-specific temporary files
+# TensorBoard logs and experiment tracking
+runs/
+mlruns/
+lightning_logs/
+
+# Operating system metadata
 .DS_Store
 Thumbs.db
 desktop.ini
 *.tmp
+*.bak
