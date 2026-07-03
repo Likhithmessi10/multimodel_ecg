@@ -1,17 +1,19 @@
 === MULTI-MODAL ECG RESEARCH MANUSCRIPT EVIDENCE DECK ===
 
 Best Proposed Late Fusion Model Strategy: Feature_Attention Fusion
-Test Macro F1-Score: 0.2128
-Test Micro F1-Score: 0.5862
-Test Macro AUROC: 0.4311
-Test Macro AUPRC: 0.3778
-
+Test Macro F1-Score: 0.4659
 === STATISTICAL SIGNIFICANCE ===
-McNemar Test p-value proposed vs baseline: 3.7635e-02
-Wilcoxon Signed-Rank Test p-value: 1.2079e-02
+McNemar Test p-value proposed vs baseline: 9.2517e-05
+Wilcoxon Signed-Rank Test p-value: 6.2754e-05
+
+=== CALIBRATION METRICS ===
+ECE: 0.0854
+Brier Score: 0.1146
 
 === DEMOGRAPHIC COHORTS PERFORMANCE ===
-Cohort: Male | Size: 10 | Macro F1: 0.2314 | Macro AUROC: 0.3321
-Cohort: Female | Size: 10 | Macro F1: 0.1882 | Macro AUROC: 0.6556
-Cohort: Young (<65) | Size: 20 | Macro F1: 0.2128 | Macro AUROC: 0.4311
-Cohort: Normal BMI (<25) | Size: 20 | Macro F1: 0.2128 | Macro AUROC: 0.4311
+Cohort: Male | Size: 52 | Macro F1: 0.5115 | Macro AUROC: 0.8298
+Cohort: Female | Size: 48 | Macro F1: 0.4110 | Macro AUROC: 0.8949
+Cohort: Young (<65) | Size: 65 | Macro F1: 0.4475 | Macro AUROC: 0.8732
+Cohort: Elderly (>=65) | Size: 35 | Macro F1: 0.4935 | Macro AUROC: 0.8496
+Cohort: Normal BMI (<25) | Size: 15 | Macro F1: 0.6016 | Macro AUROC: 0.9140
+Cohort: High BMI (>=25) | Size: 85 | Macro F1: 0.4493 | Macro AUROC: 0.8470

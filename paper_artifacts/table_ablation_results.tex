@@ -1,11 +1,12 @@
-\begin{tabular}{lcccccc}
+\begin{tabular}{lcccccccc}
 \toprule
-Fusion Type & Macro F1-Score & Micro F1-Score & Macro AUROC & Macro AUPRC & Parameters & Latency (ms) \\
+Fusion Type & Macro F1-Score & Micro F1-Score & Macro AUROC & Macro AUPRC & ECE & Brier Score & Parameters & Latency (ms) \\
 \midrule
-Concat & 0.022222 & 0.090909 & 0.352120 & 0.302293 & 116997 & 0.949931 \\
-Gated & 0.177778 & 0.800000 & 0.681305 & 0.457935 & 127349 & 1.709867 \\
-Cross Attention & 0.177778 & 0.800000 & 0.641923 & 0.444036 & 127413 & 1.031101 \\
-Feature Attention & 0.212834 & 0.586207 & 0.431140 & 0.377803 & 136437 & 0.919735 \\
-Dynamic Weighted & 0.198830 & 0.500000 & 0.302504 & 0.290981 & 122327 & 1.147199 \\
+Concat & 0.446315 & 0.599078 & 0.850607 & 0.609632 & 0.114992 & 0.126387 & 116997 & 1.040757 \\
+Gated & 0.175531 & 0.504854 & 0.853515 & 0.610874 & 0.125824 & 0.134117 & 127349 & 1.184008 \\
+Cross Attention & 0.338971 & 0.557078 & 0.841445 & 0.605766 & 0.104872 & 0.128628 & 127413 & 1.108861 \\
+Feature Attention & 0.465913 & 0.629108 & 0.857927 & 0.684232 & 0.085362 & 0.114590 & 136437 & 1.038654 \\
+Dynamic Weighted & 0.169244 & 0.483721 & 0.828738 & 0.567312 & 0.117164 & 0.143754 & 122327 & 1.188450 \\
+Reliability Attention & 0.262832 & 0.551724 & 0.858561 & 0.666658 & 0.097403 & 0.124595 & 135830 & 1.087337 \\
 \bottomrule
 \end{tabular}

@@ -173,6 +173,52 @@ class DynamicWeightedFusion(nn.Module):
         out = w_sig * self.linear_sig(h_sig) + w_meta * self.linear_meta(h_meta)
         return out
 
+class PhysiologyGuidedReliabilityAwareAttentionFusion(nn.Module):
+    """
+    Physiology-Guided Reliability-Aware Attention Fusion (PG-RAAF) Module.
+    Dynamically estimates raw ECG signal quality/reliability to scale patient demographics,
+    preventing noise propagation in multi-modal diagnostics.
+    """
+    def __init__(self, d_sig=64, d_meta=16, d_model=64):
+        super(PhysiologyGuidedReliabilityAwareAttentionFusion, self).__init__()
+        self.reliability_estimator = nn.Sequential(
+            nn.Linear(d_sig, 16),
+            nn.ReLU(),
+            nn.Linear(16, 1),
+            nn.Sigmoid()
+        )
+        self.proj_meta = nn.Sequential(
+            nn.Linear(d_meta, d_model),
+            nn.BatchNorm1d(d_model),
+            nn.ReLU()
+        )
+        self.q_proj = nn.Linear(d_sig, d_model)
+        self.k_proj = nn.Linear(d_model, d_model)
+        self.v_proj = nn.Linear(d_model, d_model)
+        self.out_proj = nn.Linear(d_model, d_model)
+        self.scale = d_model ** -0.5
+        
+    def forward(self, h_sig, h_meta):
+        # 1. Estimate ECG reliability scalar R (B, 1)
+        r = self.reliability_estimator(h_sig)
+        
+        # 2. Project clinical metadata
+        h_meta_proj = self.proj_meta(h_meta)
+        
+        # 3. Scale demographics by reliability
+        h_meta_scaled = r * h_meta_proj
+        
+        # 4. Compute Cross-Attention
+        q = self.q_proj(h_sig).unsqueeze(1)
+        k = self.k_proj(h_meta_scaled).unsqueeze(1)
+        v = self.v_proj(h_meta_scaled).unsqueeze(1)
+        
+        attn_scores = torch.softmax((q @ k.transpose(-2, -1)) * self.scale, dim=-1)
+        attn_out = (attn_scores @ v).squeeze(1)
+        
+        fused = self.out_proj(attn_out) + q.squeeze(1) # Skip connection
+        return fused
+
 # ----------------------------------------------------
 # COMPATIBLE & NOVEL MULTI-MODAL ARCHITECTURES
 # ----------------------------------------------------
@@ -197,7 +243,7 @@ class SignalOnlyNet(nn.Module):
 class LateFusionNet(nn.Module):
     """
     Multi-Modal Late-Fusion Network combining 1D-ResNet and MLP metadata branches.
-    Supports Gated, Cross-Attention, Feature Attention, and Dynamic Weighted Fusion.
+    Supports Gated, Cross-Attention, Feature Attention, Dynamic Weighted, and Reliability Attention Fusion.
     """
     def __init__(self, in_channels=12, meta_features=4, num_classes=5, fusion_type="concat", mc_dropout_rate=0.0):
         super(LateFusionNet, self).__init__()
@@ -227,6 +273,10 @@ class LateFusionNet(nn.Module):
             self.fusion_dim = 64
             self.fusion_module = DynamicWeightedFusion(d_sig=64, d_meta=16, d_out=64)
             self.fc = nn.Linear(self.fusion_dim, num_classes)
+        elif fusion_type == "reliability_attention":
+            self.fusion_dim = 64
+            self.fusion_module = PhysiologyGuidedReliabilityAwareAttentionFusion(d_sig=64, d_meta=16, d_model=64)
+            self.fc = nn.Linear(self.fusion_dim, num_classes)
         else:
             raise ValueError(f"Unknown fusion strategy type: {fusion_type}")
             
@@ -241,7 +291,7 @@ class LateFusionNet(nn.Module):
         if self.fusion_type == "concat":
             fused = torch.cat((sig_emb, meta_emb), dim=1) # (B, 80)
             fused = self.fusion_module(fused)
-        elif self.fusion_type in ["gated", "cross_attention", "dynamic_weighted"]:
+        elif self.fusion_type in ["gated", "cross_attention", "dynamic_weighted", "reliability_attention"]:
             fused = self.fusion_module(sig_emb, meta_emb) # (B, 64)
         elif self.fusion_type == "feature_attention":
             concat = torch.cat((sig_emb, meta_emb), dim=1) # (B, 80)

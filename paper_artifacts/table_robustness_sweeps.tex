@@ -2,20 +2,20 @@
 \toprule
 Scenario & Macro_F1 & Micro_F1 & Macro_AUROC & Macro_AUPRC \\
 \midrule
-Clean Baseline & 0.212834 & 0.586207 & 0.452522 & 0.382515 \\
-Missing Demographics: Age Removed & 0.198864 & 0.535714 & 0.541374 & 0.490659 \\
-Missing Demographics: Sex Removed & 0.224599 & 0.620690 & 0.460636 & 0.351148 \\
-Missing Demographics: Height Removed & 0.212834 & 0.586207 & 0.538395 & 0.411265 \\
-Missing Demographics: Weight Removed & 0.214141 & 0.600000 & 0.413816 & 0.335849 \\
-Missing Demographics: All Metadata Removed & 0.206061 & 0.561404 & 0.534485 & 0.589623 \\
-ECG Noise: Gaussian (std=0.05) & 0.212834 & 0.586207 & 0.425914 & 0.380579 \\
-ECG Noise: Gaussian (std=0.15) & 0.219221 & 0.600000 & 0.422204 & 0.379939 \\
-ECG Noise: Gaussian (std=0.30) & 0.195833 & 0.444444 & 0.405428 & 0.378308 \\
-ECG Noise: Baseline Wander (amp=0.2 mV) & 0.206061 & 0.551724 & 0.454368 & 0.382344 \\
-ECG Noise: Baseline Wander (amp=0.4 mV) & 0.239394 & 0.500000 & 0.428911 & 0.378502 \\
-ECG Noise: Baseline Wander (amp=0.6 mV) & 0.157566 & 0.289855 & 0.428911 & 0.378502 \\
-ECG Noise: Lead Dropout (17% channels dropped) & 0.219221 & 0.610169 & 0.430775 & 0.385531 \\
-ECG Noise: Lead Dropout (33% channels dropped) & 0.219221 & 0.610169 & 0.441996 & 0.358200 \\
-ECG Noise: Lead Dropout (50% channels dropped) & 0.219221 & 0.610169 & 0.483388 & 0.342476 \\
+Clean Baseline & 0.455315 & 0.619718 & 0.857597 & 0.687842 \\
+Missing Demographics: Age Removed & 0.445903 & 0.613208 & 0.856353 & 0.683082 \\
+Missing Demographics: Sex Removed & 0.455315 & 0.619718 & 0.857378 & 0.687011 \\
+Missing Demographics: Height Removed & 0.455315 & 0.619718 & 0.858601 & 0.689555 \\
+Missing Demographics: Weight Removed & 0.455315 & 0.619718 & 0.858278 & 0.688999 \\
+Incorrect Demographics (Chart Mismatch Swapped) & 0.456585 & 0.616822 & 0.855629 & 0.683486 \\
+ECG Noise: Gaussian (std=0.05) & 0.462537 & 0.619048 & 0.855082 & 0.676381 \\
+ECG Noise: Gaussian (std=0.15) & 0.321197 & 0.296296 & 0.842459 & 0.672835 \\
+ECG Noise: Gaussian (std=0.30) & 0.192272 & 0.268949 & 0.808287 & 0.639891 \\
+ECG Noise: Baseline Wander (amp=0.2 mV) & 0.362406 & 0.446927 & 0.839298 & 0.653944 \\
+ECG Noise: Baseline Wander (amp=0.4 mV) & 0.244859 & 0.246305 & 0.824100 & 0.646032 \\
+ECG Noise: Baseline Wander (amp=0.6 mV) & 0.276875 & 0.272000 & 0.812882 & 0.631325 \\
+ECG Noise: Lead Dropout (17% channels dropped) & 0.433926 & 0.601942 & 0.851602 & 0.674993 \\
+ECG Noise: Lead Dropout (33% channels dropped) & 0.395424 & 0.546392 & 0.815391 & 0.642763 \\
+ECG Noise: Lead Dropout (50% channels dropped) & 0.281211 & 0.479532 & 0.842042 & 0.589369 \\
 \bottomrule
 \end{tabular}

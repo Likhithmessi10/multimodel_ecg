@@ -1,12 +1,12 @@
-\begin{tabular}{lcccccc}
+\begin{tabular}{lcccccccc}
 \toprule
-Model Architecture & Macro F1 & Micro F1 & Macro AUROC & Macro AUPRC & Model Size (Params) & Inference Speed (ms) \\
+Model Architecture & Macro F1 & Micro F1 & Macro AUROC & Macro AUPRC & ECE & Brier & Size (Params) & Latency (ms) \\
 \midrule
-Demographic XGBoost & 0.341935 & 0.666667 & 0.542608 & 0.498163 & 0 & 0.305235 \\
-Simple 1D CNN & 0.177778 & 0.800000 & 0.564912 & 0.362387 & 160677 & 0.206995 \\
-InceptionTime Baseline & 0.215873 & 0.450000 & 0.486349 & 0.427823 & 64645 & 2.663755 \\
-Transformer ECG Baseline & 0.177778 & 0.800000 & 0.581908 & 0.446154 & 78853 & 0.531769 \\
-ResNet ECG Only & 0.171429 & 0.483871 & 0.608187 & 0.505344 & 116165 & 1.123011 \\
-Proposed Late-Fusion (Feature_Attention) & 0.212834 & 0.586207 & 0.431140 & 0.377803 & 136437 & 0.919735 \\
+Demographic XGBoost & 0.145793 & 0.377778 & 0.717282 & 0.431497 & 0.083160 & 0.155883 & 0 & 0.119131 \\
+Simple 1D CNN & 0.650118 & 0.692308 & 0.859652 & 0.651712 & 0.217847 & 0.157814 & 160677 & 0.260227 \\
+InceptionTime Baseline & 0.342281 & 0.567686 & 0.809955 & 0.559646 & 0.195057 & 0.169936 & 64645 & 2.734556 \\
+Transformer ECG Baseline & 0.158730 & 0.500000 & 0.754095 & 0.506017 & 0.072494 & 0.153097 & 78853 & 0.668898 \\
+ResNet ECG Only & 0.489379 & 0.636364 & 0.864396 & 0.661103 & 0.109807 & 0.117291 & 116165 & 1.065590 \\
+Proposed Late-Fusion (Feature_Attention) & 0.465913 & 0.629108 & 0.857927 & 0.684232 & 0.085362 & 0.114590 & 136437 & 1.038654 \\
 \bottomrule
 \end{tabular}

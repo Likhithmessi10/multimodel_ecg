@@ -1,0 +1,22 @@
+================================================================================
+            AUTOMATED CLINICAL INTERPRETATION & PHYSIOLOGICAL DISCUSSION
+================================================================================
+
+1. DISEASE-SPECIFIC PHYSIOLOGICAL ECG LEAD ATTRIBUTIONS:
+- Normal ECG (NORM): Localized attributions focus on sinus P-waves and regular QRS segments across Limb Lead II and Chest Lead V5.
+- Myocardial Infarction (MI): Attribution maps highlight significant elevations/depressions in the ST-segment across anterior chest leads V2-V4 (suggesting LAD occlusion) or inferior limb leads II, III, and aVF (suggesting RCA occlusion).
+- ST/T Changes (STTC): attributions cluster around T-wave inversions and ST deviations in lateral chest leads V5-V6.
+- Conduction Disturbance (CD): Attributions highlight broad, notched QRS waveforms in leads I, aVL, and V6 (suggesting Left Bundle Branch Block) or rabbit-ear rsR' patterns in V1-V2 (suggesting Right Bundle Branch Block).
+- Hypertrophy (HYP): Attributions localize deep S-waves in lead V1/V2 and tall R-waves in V5/V6, corresponding to Sokolow-Lyon diagnostic metrics.
+
+2. ROLE OF DEMOGRAPHIC CONTEXT IN CLINICAL DECISIONS:
+The integration of demographic metadata is essential because: 
+- Cardiovascular risks, arterial stiffening, and conduction blockages increase with Age.
+- Normal ECG voltage boundaries differ significantly between Male and Female cohorts.
+- Patient height and weight dictate physical chest size, directly altering heart proximity to sensors and baseline lead voltage amplitudes (e.g. low voltage signs in high-BMI cohorts).
+
+3. ADAPTIVE FUSION IMPACTS ON CLINICAL SAFETY:
+Physiology-Guided Reliability-Aware Attention Fusion (PG-RAAF) mitigates risk by:
+- Quantifying raw signal quality dynamically.
+- De-weighting demographics when ECG waveforms are noisy or electrodes are detached, maintaining diagnostic safety.
+- Reducing Expected Calibration Error (ECE), ensuring that predicted probabilities accurately match clinical event frequencies.
