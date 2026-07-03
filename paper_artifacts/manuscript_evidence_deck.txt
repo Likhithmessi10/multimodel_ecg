@@ -1,0 +1,73 @@
+================================================================================
+               PTB-XL ECG CLASSIFICATION EVIDENCE DECK MANUSCRIPT ARTIFACT
+================================================================================
+
+1. DATASET SCHEMA & CHARACTERISTIC MATRICES
+----------------------------------------
+Absolute Sample Counts:
+  - Training Set (Folds 1-8): 156 records
+  - Validation Set (Fold 9):  20 records
+  - Testing Set (Fold 10):    20 records
+  - Total Dataset Processed:  196 records
+
+Class Imbalance Vectors inside Test Set (Fold 10):
+  - NORM: 16 positive instances
+  - MI: 1 positive instances
+  - STTC: 2 positive instances
+  - CD: 1 positive instances
+  - HYP: 0 positive instances
+
+Preprocessing Array Dimensions:
+  - Raw signal dimension:                  (1000, 12) (samples, leads)
+  - Dimension after FIR filter:             (1000, 12) (samples, leads)
+  - Dimension loaded to PyTorch CNN:        (12, 1000) (leads, samples)
+  - Metadata feature matrix shape (Train):  (156, 4) (records, features)
+  - Metadata feature matrix shape (Val):    (20, 4) (records, features)
+  - Metadata feature matrix shape (Test):   (20, 4) (records, features)
+
+2. CORE MODEL TOPOLOGY PARAMETERS
+----------------------------------------
+Signal Branch (1D CNN ResNet) output shapes:
+  - Input tensor shape:                     torch.Size([1, 12, 1000])
+  - Initial Convolution (prep) output:      torch.Size([1, 32, 1000])
+  - Residual Block 1 output:                torch.Size([1, 32, 500])
+  - Residual Block 2 output:                torch.Size([1, 64, 250])
+  - Residual Block 3 output:                torch.Size([1, 64, 125])
+  - Global Average Pooling (GAP) output:    torch.Size([1, 64, 1])
+  - Flattened signal embedding shape:       torch.Size([1, 64])
+
+Metadata Branch (MLP) progression:
+  - Input metadata features count:          4
+  - Hidden MLP layers / output progression:  4 -> 32 -> 16
+  - Flattened metadata embedding shape:     torch.Size([1, 16])
+
+Late Fusion Junction:
+  - Joint concatenated embedding vector shape: [1, 80] (64 signal + 16 metadata)
+  - Output Logits shape:                      [1, 5] (NORM, MI, STTC, CD, HYP)
+
+Hyperparameter Matrix:
+  - Learning Rate:             0.001
+  - Weight Decay Coefficient:  1e-4
+  - Batch Size:                64
+  - Decision Threshold:        0.50
+  - Early Stopping Epoch Run:  N/A (Loaded from checkpoint)
+
+3. COHESIVE PERFORMANCE & ABLATION METRICS
+----------------------------------------
+Model Performance Ablation Table on Fold 10:
+
+| Metric         |   Tabular XGBoost |   Signal-Only ResNet |   Proposed Late-Fusion |
+|:---------------|------------------:|---------------------:|-----------------------:|
+| Macro F1-Score |          0.341935 |             0.196825 |               0.334641 |
+| Micro F1-Score |          0.666667 |             0.566667 |               0.6      |
+| Macro AUROC    |          0.542608 |             0.557895 |               0.732109 |
+| Macro AUPRC    |          0.498163 |             0.49437  |               0.522276 |
+
+Statistical Confidence Tracking (Proposed Late-Fusion vs Signal-Only ResNet):
+  - Paired t-test on BCE loss per sample:
+    * Test Statistic:    0.4843
+    * p-value:           0.6337
+  - McNemar's test on binary classification accuracy:
+    * Chi-squared Stat:  0.1250
+    * p-value:           0.7237
+

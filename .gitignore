@@ -1,0 +1,30 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Virtual environments
+venv/
+.venv/
+env/
+venv.bak/
+
+# Local configuration files
+.streamlit/config.toml
+
+# Heavy datasets and cached waveforms/scalers
+data/records100/
+data/ptbxl_database.csv
+data/scp_statements.csv
+data/cache/
+
+# Saved model checkpoints and weights
+models/*.pth
+models/*.joblib
+
+# OS-specific temporary files
+.DS_Store
+Thumbs.db
+desktop.ini
+*.tmp

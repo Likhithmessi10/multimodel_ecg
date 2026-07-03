@@ -1,0 +1,5 @@
+Statistical Metric,Value,Interpretation
+Paired t-test statistic (BCE Loss),0.4843071274800606,Difference in BCE loss distribution
+Paired t-test p-value (BCE Loss),0.633703604499379,Stat significance of loss improvement (p < 0.05 is significant)
+McNemar's test statistic (Accuracy),0.125,Correctness contingency difference
+McNemar's test p-value (Accuracy),0.7236736098317629,Stat significance of prediction accuracy changes

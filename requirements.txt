@@ -1,0 +1,11 @@
+torch
+wfdb
+streamlit
+scikit-learn
+scipy
+xgboost
+pandas
+numpy
+plotly
+matplotlib
+tqdm
