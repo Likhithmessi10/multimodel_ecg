@@ -1,5 +1,5 @@
 # IEEE Conference Manuscript Template (Max 5,000 Words)
-**Proposed Title**: *Physiology-Guided Reliability-Aware Attention Fusion for Multi-Modal ECG Diagnostics*
+**Proposed Title**: *Adaptive Multimodal Fusion for Multi-Label ECG Diagnosis Using Deep Signal Learning and Clinical Metadata*
 
 This template is structured to target a maximum length of 5,000 words upon expansion, making it suitable for a standard 4-to-6-page IEEE conference submission or letter. It contains 50–60% of the actual draft text, focusing on methodology, calibration results, and structural placeholders.
 
@@ -12,6 +12,8 @@ Summarize the study in a single paragraph (120 to 180 words).
 
 ## Starter Content
 "Automated deep learning models for electrocardiogram (ECG) classification process waveforms in isolation, ignoring patient demographics. While multi-modal models integrate demographics, standard late-fusion methods rely on concatenation, which can propagate noise when ECG signals are degraded. We propose **Physiology-Guided Reliability-Aware Attention Fusion (PG-RAAF)** to address this vulnerability. PG-RAAF estimates an ECG reliability score ($R \in [0,1]$) from time-series feature maps to scale patient demographics before applying cross-attention. We evaluate the proposed model on the PTB-XL dataset, comparing it to 1D CNN, InceptionTime, Transformer ECG, and ResNet baselines. Under simulated noise (baseline drift, lead dropouts) and demographic chart mismatches, PG-RAAF outperforms concatenation methods. The model achieves a Test Macro F1-score of `[Insert F1]` and improves probability calibration, reducing Expected Calibration Error (ECE) to `[Insert ECE]` and Brier score to `[Insert Brier]`. The integration of Monte Carlo (MC) Dropout allows the model to flag low-confidence predictions, supporting safe clinical decision-making."
+
+**Keywords**—Electrocardiography (ECG), explainable AI, multi-modal fusion, neural networks, reliability gating, uncertainty calibration.
 
 ---
 
@@ -127,17 +129,24 @@ Document the experimental configuration, including hardware, libraries, and hype
 ## Starter Content
 "Our experimental setup is configured to support reproducibility. We optimize models using AdamW and a OneCycleLR learning rate scheduler. Training uses mixed precision (AMP) and early stopping based on validation loss. Random seeds are fixed globally (`seed=42`) across PyTorch, NumPy, and XGBoost to ensure reproducible execution. Model training is executed on an NVIDIA GPU using PyTorch (v2.0+) and standard data science libraries.
 
-We evaluate model performance using Macro F1-score, Micro F1-score, Macro AUROC, and Macro AUPRC. To evaluate model calibration, we report Expected Calibration Error (ECE) and Brier scores:
+We evaluate model performance using Macro F1-score, Micro F1-score, Macro AUROC, and Macro AUPRC. To evaluate model calibration, we report Expected Calibration Error (ECE) and Brier scores. Expected Calibration Error (ECE) is formulated as:
 $$\text{ECE} = \sum_{m=1}^M \frac{|B_m|}{N} \left| \text{acc}(B_m) - \text{conf}(B_m) \right|$$
-where $B_m$ is the $m$-th confidence bin and $N$ is the number of samples."
-
-## Expansion Notes
-Students should expand this section to approximately 400 words, detailing the software versions and dataset cache directory configurations.
+where $B_m$ is the $m$-th confidence bin and $N$ is the number of samples. The multi-label Brier score is computed as:
+$$\text{Brier} = \frac{1}{N \cdot C} \sum_{n=1}^N \sum_{c=1}^C (y_{n,c} - p_{n,c})^2$$
+where $y_{n,c}$ is the binary ground-truth label and $p_{n,c}$ is the predicted probability for class $c$ on sample $n$."
 
 ## Required Tables
 - `TABLE REQUIRED`:
   - **Caption**: *Table III. Model Training and Optimization Hyperparameters*
   - **Columns**: Hyperparameter Name, Configuration Value, Description.
+
+## Required Figures
+- `FIGURE REQUIRED`:
+  - **Purpose**: Plot training and validation loss curves showing convergence.
+  - **Caption**: *Fig. 4. Binary Cross-Entropy loss convergence curves on training and validation splits.*
+  - **Suggested filename**: `figure1_loss_curves.png`
+  - **Where it should appear**: Section V (Experimental Setup & Metrics) or Section VI (Results)
+  - **How it should be generated**: Automatically generated and written to `paper_artifacts/figure1_loss_curves.png` (and PDF) during model training.
 
 ---
 
@@ -149,26 +158,41 @@ Present the classification performance, calibration metrics, baseline comparison
 ## Starter Content
 "We compare the performance of the proposed PG-RAAF model to single-modality baselines (XGBoost, 1D CNN, InceptionTime, Transformer ECG, ResNet ECG Only) and standard late-fusion methods. Table IV summarizes the classification performance, ECE, Brier scores, parameters, and inference latencies across models.
 
-ROC and Precision-Recall curves are generated automatically. Fig. 4 plots the multi-class Receiver Operating Characteristic (ROC) curves, and Fig. 5 plots the multi-class Precision-Recall (PR) curves of the best PG-RAAF model on the test set. Fig. 6 shows the multi-class confusion matrices for the five diagnostic superclasses.
+ROC and Precision-Recall curves are generated automatically. Fig. 5 plots the multi-class Receiver Operating Characteristic (ROC) curves, and Fig. 6 plots the multi-class Precision-Recall (PR) curves of the best PG-RAAF model on the test set. Fig. 7 displays the reliability calibration curves, showing predicted confidence against actual positive class frequencies. Fig. 8 shows the multi-class confusion matrices for the five diagnostic superclasses. Fig. 9 shows the relative demographic feature importance weights from the XGBoost baseline.
 
-Table V summarizes the results of the ablation configurations, comparing F1, AUROC, ECE, Brier scores, and inference latencies. Table VI summarizes the results across the noise scenarios, demonstrating model robustness under simulated clinical noise and input errors."
-
-## Expansion Notes
-Students should write approximately 800 words detailing the results, comparing the proposed model's performance and calibration to the baselines, and discussing how PG-RAAF maintains stability under noise.
+Table V summarizes the results of the ablation configurations, comparing F1, AUROC, ECE, Brier scores, and inference latencies. Table VI summarizes the results across the noise scenarios, demonstrating model robustness under simulated clinical noise and input errors. Table VII summarizes the Leave-Group-Out (LGO) generalization sweeps, simulating performance under gender-specific and age-specific clinical domain shifts."
 
 ## Required Figures
 - `FIGURE REQUIRED`:
   - **Purpose**: Plot multi-class Receiver Operating Characteristic (ROC) curves.
-  - **Caption**: *Fig. 4. Receiver Operating Characteristic (ROC) curves of the best PG-RAAF model on the test set.*
+  - **Caption**: *Fig. 5. Receiver Operating Characteristic (ROC) curves of the best PG-RAAF model on the test set.*
   - **Suggested filename**: `figure_roc_curves.png`
+  - **Where it should appear**: Section VI (Results)
+  - **How it should be generated**: Automatically generated and written to `paper_artifacts/figure_roc_curves.png` (and PDF) during model training.
 - `FIGURE REQUIRED`:
   - **Purpose**: Plot multi-class Precision-Recall (PR) curves.
-  - **Caption**: *Fig. 5. Precision-Recall (PR) curves of the best PG-RAAF model on the test set.*
+  - **Caption**: *Fig. 6. Precision-Recall (PR) curves of the best PG-RAAF model on the test set.*
   - **Suggested filename**: `figure_pr_curves.png`
+  - **Where it should appear**: Section VI (Results)
+  - **How it should be generated**: Automatically generated and written to `paper_artifacts/figure_pr_curves.png` (and PDF) during model training.
+- `FIGURE REQUIRED`:
+  - **Purpose**: Plot reliability calibration curves to show model calibration.
+  - **Caption**: *Fig. 7. Reliability calibration curves comparing predicted confidence with actual positive sample ratios.*
+  - **Suggested filename**: `figure_calibration_curves.png`
+  - **Where it should appear**: Section VI (Results)
+  - **How it should be generated**: Automatically generated and written to `paper_artifacts/figure_calibration_curves.png` (and PDF) during model training.
 - `FIGURE REQUIRED`:
   - **Purpose**: Plot the multi-class Confusion Matrix.
-  - **Caption**: *Fig. 6. Confusion matrices for the five diagnostic superclasses on the test set.*
+  - **Caption**: *Fig. 8. Confusion matrices for the five diagnostic superclasses on the test set.*
   - **Suggested filename**: `figure_confusion_matrix.png`
+  - **Where it should appear**: Section VI (Results)
+  - **How it should be generated**: Automatically generated and written to `paper_artifacts/figure_confusion_matrix.png` (and PDF) during model training.
+- `FIGURE REQUIRED`:
+  - **Purpose**: Plot feature importance weights of patient demographic variables.
+  - **Caption**: *Fig. 9. Demographic feature importance weights computed using Gini importance in the XGBoost baseline.*
+  - **Suggested filename**: `figure_feature_importance.png`
+  - **Where it should appear**: Section VI (Results)
+  - **How it should be generated**: Automatically generated and written to `paper_artifacts/figure_feature_importance.png` (and PDF) during model training.
 
 ## Required Tables
 - `TABLE REQUIRED`:
@@ -180,13 +204,16 @@ Students should write approximately 800 words detailing the results, comparing t
 - `TABLE REQUIRED`:
   - **Caption**: *Table VI. Model Performance Under Modality Degradation and Clinical Noise*
   - **Columns**: Noise Scenario, Macro F1, Micro F1, Macro AUROC, Macro AUPRC.
+- `TABLE REQUIRED`:
+  - **Caption**: *Table VII. Leave-Group-Out (LGO) Generalization Validation Sweeps Under Demographic Domain Shifts*
+  - **Columns**: Experiment, Train Count, Test Count, Macro F1, Macro AUROC, ECE, Brier Score.
 
 ---
 
-# VII. Explainability & Fairness
+# VII. Explainability, Fairness & Statistical Validation
 
 ## Purpose
-Evaluate model explainability and performance parity across demographic cohorts.
+Evaluate model explainability, performance parity across demographic cohorts, and statistical significance of diagnostic improvements.
 
 ## Starter Content
 "To provide explainability for clinical validation, we generate:
@@ -194,31 +221,39 @@ Evaluate model explainability and performance parity across demographic cohorts.
 2. **Integrated Gradients Lead Attributions**: Highlights positive and negative contributions across the 12 leads.
 3. **Shapley Demographic Attributions**: Visualizes how age, sex, weight, and height contribute to predictions.
 
-Fig. 7 plots the Grad-CAM temporal attributions overlaid on the ECG Lead II signal. Fig. 8 shows the Integrated Gradients lead-wise attributions, and Fig. 9 shows the demographic feature attributions computed using exact Shapley values.
+Fig. 10 plots the Grad-CAM temporal attributions overlaid on the ECG Lead II signal. Fig. 11 shows the Integrated Gradients lead-wise attributions, and Fig. 12 shows the demographic feature attributions computed using exact Shapley values.
 
-We evaluate model fairness across demographic cohorts (sex, age, and BMI) to ensure equitable diagnostic performance. Table VII summarizes the results across sex, age, and BMI cohorts, reporting Macro F1, Micro F1, Macro AUROC, and Macro AUPRC for each cohort to evaluate potential bias."
+We evaluate model fairness across demographic cohorts (sex, age, and BMI) to ensure equitable diagnostic performance. Table VIII summarizes the results across sex, age, and BMI cohorts, reporting Macro F1, Micro F1, Macro AUROC, and Macro AUPRC for each cohort to evaluate potential bias.
 
-## Expansion Notes
-Students should write approximately 800 words explaining the visual attributions, discussing how the identified features align with standard diagnostic guidelines, and addressing performance parity across cohorts.
+To assess the statistical significance of performance improvements, we perform Wilcoxon signed-rank tests over sample-wise cross-entropy losses and McNemar tests over diagnostic classification outputs. Table IX summarizes the test statistics and p-values, verifying that the PG-RAAF network's diagnostic improvements are statistically significant ($p < 0.05$)."
 
 ## Required Figures
 - `FIGURE REQUIRED`:
   - **Purpose**: Display Grad-CAM temporal attributions on Lead II.
-  - **Caption**: *Fig. 7. Grad-CAM temporal attributions overlaid on the ECG Lead II signal.*
+  - **Caption**: *Fig. 10. Grad-CAM temporal attributions overlaid on the ECG Lead II signal.*
   - **Suggested filename**: `figure_attention_maps.png`
+  - **Where it should appear**: Section VII (Explainability & Fairness)
+  - **How it should be generated**: Automatically generated and written to `paper_artifacts/figure_attention_maps.png` (and PDF) during model training.
 - `FIGURE REQUIRED`:
   - **Purpose**: Plot Integrated Gradients lead attributions.
-  - **Caption**: *Fig. 8. Integrated Gradients lead-wise attributions across the 12 leads.*
+  - **Caption**: *Fig. 11. Integrated Gradients lead-wise attributions across the 12 leads.*
   - **Suggested filename**: `figure_lead_contribution.png`
+  - **Where it should appear**: Section VII (Explainability & Fairness)
+  - **How it should be generated**: Automatically generated and written to `paper_artifacts/figure_lead_contribution.png` (and PDF) during model training.
 - `FIGURE REQUIRED`:
   - **Purpose**: Plot demographic Shapley values.
-  - **Caption**: *Fig. 9. Demographic feature attributions computed using exact Shapley values.*
+  - **Caption**: *Fig. 12. Demographic feature attributions computed using exact Shapley values.*
   - **Suggested filename**: `figure_shap_plots.png`
+  - **Where it should appear**: Section VII (Explainability & Fairness)
+  - **How it should be generated**: Automatically generated and written to `paper_artifacts/figure_shap_plots.png` (and PDF) during model training.
 
 ## Required Tables
 - `TABLE REQUIRED`:
-  - **Caption**: *Table VII. Performance Metrics across Demographic Cohorts*
+  - **Caption**: *Table VIII. Performance Metrics across Demographic Cohorts*
   - **Columns**: Cohort Group, Sample Size, Macro F1, Micro F1, Macro AUROC, Macro AUPRC.
+- `TABLE REQUIRED`:
+  - **Caption**: *Table IX. Statistical Significance and Paired Diagnostics Significance*
+  - **Columns**: Statistical Test, Test Statistic, p-value, Significant ($p < 0.05$).
 
 ---
 
